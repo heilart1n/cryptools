@@ -30,25 +30,25 @@ func (q Quantity) String() string {
 	return q.ToNative().String()
 }
 
-func (q Quantity) UpdateDecimal(d int32) Quantity {
+func (q Quantity) StringFormat(precision int) string {
+	shift := decimal.NewFromInt(10).Pow(decimal.NewFromInt32(DecimalCommon))
+	val := q.value.Div(shift)
+	ac := accounting.Accounting{
+		Symbol:    "",
+		Precision: precision,
+		Thousand:  ",",
+		Decimal:   ".",
+	}
+	return ac.FormatMoneyDecimal(val)
+}
+
+func (q Quantity) UpdateNativeDecimal(d int32) Quantity {
 	q.decimalNative = d
 	return q
 }
 
 func (q Quantity) IsZero() bool {
 	return q.value.IsZero()
-}
-
-func (q Quantity) StringFormat() string {
-	shift := decimal.NewFromInt(10).Pow(decimal.NewFromInt32(DecimalCommon))
-	val := q.value.Div(shift)
-	ac := accounting.Accounting{
-		Symbol:    "",
-		Precision: int(DecimalFormat),
-		Thousand:  ",",
-		Decimal:   ".",
-	}
-	return ac.FormatMoneyDecimal(val)
 }
 
 func ZeroQuantity() Quantity {
