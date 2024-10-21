@@ -7,7 +7,7 @@ import (
 )
 
 func (q Quantity) ToNative() decimal.Decimal {
-	return q.value.Shift(q.decimalNative - q.decimalCommon)
+	return q.value.Shift(q.decimal)
 }
 
 func (q Quantity) Float64() float64 {
@@ -31,7 +31,7 @@ func (q Quantity) String() string {
 }
 
 func (q Quantity) StringFormat(precision int) string {
-	shift := decimal.NewFromInt(10).Pow(decimal.NewFromInt32(DecimalCommon))
+	shift := decimal.NewFromInt(10).Pow(decimal.NewFromInt32(q.decimal))
 	val := q.value.Div(shift)
 	ac := accounting.Accounting{
 		Symbol:    "",
@@ -43,7 +43,7 @@ func (q Quantity) StringFormat(precision int) string {
 }
 
 func (q Quantity) UpdateNativeDecimal(d int32) Quantity {
-	q.decimalNative = d
+	q.decimal = d
 	return q
 }
 
@@ -53,8 +53,7 @@ func (q Quantity) IsZero() bool {
 
 func ZeroQuantity() Quantity {
 	return Quantity{
-		value:         decimal.NewFromInt(0),
-		decimalNative: DecimalFormat,
-		decimalCommon: DecimalCommon,
+		value:   decimal.NewFromInt(0),
+		decimal: 2,
 	}
 }
