@@ -6,28 +6,24 @@ import (
 	"math/big"
 )
 
-func (q Quantity) ToNative() decimal.Decimal {
-	return q.value.Shift(q.decimal)
-}
-
 func (q Quantity) Float64() float64 {
-	return q.ToNative().InexactFloat64()
+	return q.value.InexactFloat64()
 }
 
 func (q Quantity) Uint64() uint64 {
-	return q.ToNative().BigInt().Uint64()
+	return q.value.BigInt().Uint64()
 }
 
 func (q Quantity) BigInt() *big.Int {
-	return q.ToNative().BigInt()
+	return q.value.BigInt()
 }
 
 func (q Quantity) Int64() int64 {
-	return q.ToNative().BigInt().Int64()
+	return q.value.BigInt().Int64()
 }
 
 func (q Quantity) String() string {
-	return q.ToNative().String()
+	return q.value.String()
 }
 
 func (q Quantity) StringFormat(precision int) string {
